@@ -2,12 +2,12 @@
 
 {% block content %}
   <h1 id='#wiki_page'>{{wiki.title}}<small> (<a href="{{wiki.route}}">link</a>)</small></h1>
-  <h4>by <a href="{{wiki.email}}">{{wiki.name}}</a></h4>
+  <h4>by <a href="{{wiki.author.email}}">{{wiki.author.name}}</a></h4>
   <div>PLACEHOLDER TAG LIST</div>
   <hr/>
-  <div>PLACEHOLDER AUTHOR NAME WITH LINK TO AUTHOR PAGE</div>
-  <div class="page-body">{{page.content}}</div>
+  <div>{{wiki.author.name}}</div>
+  <div class="page-body">{{wiki.content}}</div>
   <hr/>
-  <a href="{{page.urlTitle}}/edit" class="btn btn-primary">edit this page</a>
-  <a href="{{page.urlTitle}}/delete" class="btn btn-danger">delete this page</a>
+  <a href="{{wiki.urlTitle}}/edit" class="btn btn-primary">edit this page</a>
+  <a href="{{wiki.urlTitle}}/delete" class="btn btn-danger">delete this page</a>
 {% endblock %}
