@@ -11,7 +11,7 @@ var User = dbObjects.User;
 router.route('/')
 	.get(function(req, res, next) {
 		console.log('got to GET /wiki/');
-		res.redirect('/');
+		// res.redirect('/');
 	})
 	.post(function(req, res, next) {
 		var page = Page.build({
@@ -39,3 +39,18 @@ router.get('/add', function(req, res, next) {
 	console.log('got to GET /wiki/add');
 	res.render('addpage');
 })
+
+router.get('/:urlTitle', function (req, res, next) {
+	console.log(req.params.urlTitle, 'im url title');
+	Page.findOne({
+		where: {
+			urlTitle: req.params.urlTitle
+		}
+	})
+	.then(function (foundPage) {
+		res.json(foundPage)
+	})
+	.catch(next);
+
+	// res.send('dynamic route' + url);
+});

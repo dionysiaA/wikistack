@@ -10,9 +10,9 @@ var app = express();
 
 module.exports = app; // this line is only used to make testing easier.
 
-models.User.sync({force: true})
+models.User.sync({})
 .then(function () {
-    return models.Page.sync({force: true})
+    return models.Page.sync({})
 })
 .then(function () {
     app.listen(3000, function () {
