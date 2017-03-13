@@ -14,38 +14,25 @@ router.route('/')
 		res.redirect('/');
 	})
 	.post(function(req, res, next) {
-		// console.log(req.body);
-		// res.json(req.body);
+		var page = Page.build({
+			title: req.body['title'],
+			content: req.body['page content'],
+			status: req.body['page status'],
+		})
+		.save()
+		.then(function(pageInstance){
+			res.json(pageInstance);
+		});
 
-		// STUDENT ASSIGNMENT:
-  // add definitions for `title` and `content`
-/*
-{ 'author name': 'asdfj',
-  'author email': 'jasdf@stuff.com',
-  title: 'asjldf',
-  'page content': 'asldf',
-  'page status': 'jasf' }
-*/
-  var page = Page.build({
-    title: req.body['title'],
-		urlTitle: req.body['title'].split(' ').join('_'),
-		// replace(/\s+/g, '_'),
-    content: req.body['page content'],
-		status: req.body['page status'],
-});
-
-	var user = User.build({
-		name: req.body['author name'],
-		email: req.body['author email']
-	});
-
-  // STUDENT ASSIGNMENT:
-  // make sure we only redirect *after* our save is complete!
-  // note: `.save` returns a promise or it can take a callback.
-  page.save();
-	user.save();
-  res.redirect('/');
-
+		var user = User.build({
+			name: req.body['author name'],
+			email: req.body['author email']
+		})
+		.save()
+		.then(function(o){
+			console.log(o);
+			// res.json(o);
+		});
 	});
 
 router.get('/add', function(req, res, next) {
