@@ -10,9 +10,9 @@ var app = express();
 
 module.exports = app; // this line is only used to make testing easier.
 
-models.User.sync({})
+models.User.sync({force: true})
 .then(function () {
-    return models.Page.sync({})
+    return models.Page.sync({force: true})
 })
 .then(function () {
     app.listen(3000, function () {
@@ -53,5 +53,3 @@ app.use(function(err, req, res, next) {
 // app.listen(3000, function () {
 //   console.log('Example app listening on port 3000!')
 // })
-
-
