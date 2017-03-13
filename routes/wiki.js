@@ -11,6 +11,10 @@ var User = dbObjects.User;
 router.route('/')
 	.get(function(req, res, next) {
 		console.log('got to GET /wiki/');
+		Page.findAll()
+		.then(function (allPages) {
+			res.render('index', {pages: allPages})
+		});
 		// res.redirect('/');
 	})
 	.post(function(req, res, next) {
@@ -21,7 +25,7 @@ router.route('/')
 		})
 		.save()
 		.then(function(pageInstance){
-			res.json(pageInstance);
+			res.redirect(pageInstance.route);
 		});
 
 		var user = User.build({
@@ -30,7 +34,7 @@ router.route('/')
 		})
 		.save()
 		.then(function(o){
-			console.log(o);
+			// console.log(o);
 			// res.json(o);
 		});
 	});
@@ -48,9 +52,22 @@ router.get('/:urlTitle', function (req, res, next) {
 		}
 	})
 	.then(function (foundPage) {
-		res.json(foundPage)
+		// console.log(foundPage.dataValues);
+		res.render('wikipage', {page: foundPage})
 	})
 	.catch(next);
 
 	// res.send('dynamic route' + url);
 });
+
+// {
+// route: "/wiki/ajsa_cat_dog_love",
+// id: 1,
+// title: "ajsa cat dog love",
+// urlTitle: "ajsa_cat_dog_love",
+// content: "stuff",
+// status: "open",
+// date: "2017-03-13T19:59:56.000Z",
+// createdAt: "2017-03-13T19:59:56.865Z",
+// updatedAt: "2017-03-13T19:59:56.865Z"
+// }
