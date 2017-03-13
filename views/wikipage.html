@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
 
 {% block content %}
-  <h1>{{page.title}}<small> (<a href="{{page.route}}">Similar</a>)</small></h1>
-  <h4>by <a href="PLACEHOLDER-AUTHOR-URL">PLACEHOLDER AUTHOR NAME</a></h4>
+  <h1 id='#wiki_page'>{{wiki.title}}<small> (<a href="{{wiki.route}}">link</a>)</small></h1>
+  <h4>by <a href="{{wiki.email}}">{{wiki.name}}</a></h4>
   <div>PLACEHOLDER TAG LIST</div>
   <hr/>
   <div>PLACEHOLDER AUTHOR NAME WITH LINK TO AUTHOR PAGE</div>

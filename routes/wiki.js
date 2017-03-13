@@ -12,31 +12,39 @@ router.route('/')
 	.get(function(req, res, next) {
 		console.log('got to GET /wiki/');
 		Page.findAll()
-		.then(function (allPages) {
-			res.render('index', {pages: allPages})
-		});
-		// res.redirect('/');
+			.then(function(allPages) {
+				res.render('index', {
+					pages: allPages
+				})
+			});
 	})
 	.post(function(req, res, next) {
-		var page = Page.build({
-			title: req.body['title'],
-			content: req.body['page content'],
-			status: req.body['page status'],
-		})
-		.save()
-		.then(function(pageInstance){
-			res.redirect(pageInstance.route);
-		});
 
-		var user = User.build({
-			name: req.body['author name'],
-			email: req.body['author email']
-		})
-		.save()
-		.then(function(o){
-			// console.log(o);
-			// res.json(o);
-		});
+		User.findOrCreate({
+				where: {
+					name: req.body['author name'],
+					email: req.body['author email']
+				}
+			})
+			.then(function(values) {
+				console.log(values, values[0], 'what are the values in here?');
+
+				var user = values[0];
+				var page = Page.build({
+					title: req.body['title'],
+					content: req.body['page content'],
+					status: req.body['page status'],
+				});
+				return page.save()
+					.then(function(pageInstance) {
+						return pageInstance.setAuthor(user);
+					});
+			})
+			.then(function(pageInstance) {
+				res.redirect(pageInstance.route);
+			})
+			.catch(next);
+
 	});
 
 router.get('/add', function(req, res, next) {
@@ -44,30 +52,28 @@ router.get('/add', function(req, res, next) {
 	res.render('addpage');
 })
 
-router.get('/:urlTitle', function (req, res, next) {
+router.get('/:urlTitle', function(req, res, next) {
 	console.log(req.params.urlTitle, 'im url title');
 	Page.findOne({
-		where: {
-			urlTitle: req.params.urlTitle
-		}
-	})
-	.then(function (foundPage) {
-		// console.log(foundPage.dataValues);
-		res.render('wikipage', {page: foundPage})
-	})
-	.catch(next);
-
-	// res.send('dynamic route' + url);
+			where: {
+				urlTitle: req.params.urlTitle
+			},
+			include: [{
+				model: User,
+				as: 'author'
+			}]
+		})
+		// .then(function(foundPage) {
+		// 	User.findOne({
+		// 		where: {
+		// 			id: foundPage.authorId
+		// 		}
+		// 	})
+		.then(function(pageInstance) {
+			console.log(pageInstance);
+			res.render('wikipage', {
+				wiki: pageInstance
+			})
+		})
+		.catch(next);
 });
-
-// {
-// route: "/wiki/ajsa_cat_dog_love",
-// id: 1,
-// title: "ajsa cat dog love",
-// urlTitle: "ajsa_cat_dog_love",
-// content: "stuff",
-// status: "open",
-// date: "2017-03-13T19:59:56.000Z",
-// createdAt: "2017-03-13T19:59:56.865Z",
-// updatedAt: "2017-03-13T19:59:56.865Z"
-// }

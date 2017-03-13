@@ -1,6 +1,7 @@
 var models = require('./models');
 var router = require('./routes/wiki');
 var express = require('express');
+var path = require('path');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var nunjucks = require('nunjucks')
@@ -45,6 +46,8 @@ app.use(function(err, req, res, next) {
 	console.error(err.stack);
 	res.status(err.status || 500).send(err);
 });
+
+app.use(express.static('./stylesheets'));
 
 // app.get('/', function (req, res) {
 //   res.send('Hello World!')
