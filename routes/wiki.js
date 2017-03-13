@@ -20,5 +20,5 @@ router.route('/')
 
 router.get('/add', function(req, res, next) {
 	console.log('got to GET /wiki/add');
-	res.send('got to GET /wiki/add');
+	res.render('addpage');
 })

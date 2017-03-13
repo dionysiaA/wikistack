@@ -3,6 +3,7 @@ var router = require('./routes/wiki');
 var express = require('express');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
+var nunjucks = require('nunjucks')
 
 
 var app = express();
@@ -19,6 +20,11 @@ models.User.sync({})
     });
 })
 .catch(console.error);
+
+app.engine('html', nunjucks.render); // how to render html templates
+app.set('view engine', 'html'); // what file extension do our templates have
+nunjucks.configure('views', { noCache: true }); // where to find the views, caching off
+
 
 // logging middleware
 app.use(morgan('dev'));
